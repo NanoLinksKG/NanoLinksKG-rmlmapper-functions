@@ -1,6 +1,6 @@
 package io.github.ammar257ammar.rml;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,23 +32,71 @@ public class StringUtils {
 			return false;
 		}
 	}
+
+	public static boolean isRangeValue(String str1) {
+		
+		if((str1.contains("-") && str1.indexOf('-') != 0) || str1.startsWith("<") || str1.startsWith(">")) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
-	public static List<String> cartesianProductOfList(List list1){
+
+	public static boolean isValueWithQualifier(String str1, String str2){
 		
-		List<String> out = new ArrayList<String>();
-		
-		for(int i=0; i < list1.size(); i++){
-			for(int j=0; j < list1.size(); j++){
+		if((!str1.contains("-") || str1.indexOf('-') == 0) && !str1.startsWith("<") && !str1.startsWith(">")) {
 			
-				String item1 = (String) list1.get(i);
-				String item2 = (String) list1.get(j);
-				
-				if(!item1.equals(item2)){
-					out.add(item1+"-"+item2);
-				}
+			if(str2 != null && !"".equals(str2.trim())) {
+				return true;
+			}else {
+				return false;
+			}	
+		}else {
+			return false;
+		}		
+	}
+
+	public static String constructValueWithQualifier(String str1, String str2){
+		
+		if(str2 != null && !"".equals(str2.trim())) {
+			
+			if(str1 != null && !"".equals(str1.trim())) {
+				return str1 + " +/- " + str2;
+			}else {
+				return "";
 			}
 		}
 		
-		return out;
+		return "";
+	}
+	
+	public static boolean isValueWithoutQualifier(String str1, String str2){
+		
+		if((!str1.contains("-") || str1.indexOf('-') == 0) && !str1.startsWith("<") && !str1.startsWith(">")) {
+			
+			if(str2 != null && !"".equals(str2.trim())) {
+				return false;
+			}else {
+				return true;
+			}	
+		}else {
+			return false;
+		}
+	}
+	
+	public static String fixExpressionFloatingPoint(String num) {
+		
+		num = num.replaceAll("\"", "");
+		num = num.replaceAll("'", "");
+		num = num.replaceAll(" ", "");
+
+		if(num.contains(",")) {
+			num = num.replaceAll(",", ".");
+		}
+		
+		BigDecimal d = new BigDecimal(num);
+		
+		return d.toPlainString();
 	}
 }
